@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "100518634158",
+    "project_id": "attendance-app-cdf64",
+    "storage_bucket": "attendance-app-cdf64.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:100518634158:android:f0563e0a77ae808d7c033f",
+        "android_client_info": {
+          "package_name": "dev.elyor.moliya_studyasi"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD-hyCPC6mSzI_hraibx_9JJ4ExWfHoU7Y"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
