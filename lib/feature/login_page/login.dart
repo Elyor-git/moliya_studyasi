@@ -1,12 +1,18 @@
 import 'package:flutter/material.dart';
-import 'package:moliya_studyasi/common/const/app_consts.dart';
 
-class HomePage extends StatelessWidget {
-  const HomePage({super.key});
+import '../../common/const/app_consts.dart';
+
+class Login extends StatefulWidget {
+  const Login({super.key});
 
   @override
+  State<Login> createState() => _LoginState();
+}
+
+class _LoginState extends State<Login> {
+  @override
   Widget build(BuildContext context) {
-    return const Scaffold(
+    return  const Scaffold(
       body: DecoratedBox(
         decoration: BoxDecoration(
           image: DecorationImage(
@@ -17,6 +23,7 @@ class HomePage extends StatelessWidget {
         child: SizedBox(
           height: double.infinity,
           width: double.infinity,
+          child: Column(children: [Text(""),],),
         ),
       ),
     );
