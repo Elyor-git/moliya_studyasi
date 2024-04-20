@@ -1,4 +1,5 @@
  final class AppImages {
+  AppImages._();
   static const String backgroundImage3 = "assets/images/background_image_3.png";
   static const String backgroundImage2 = "assets/images/background_image_2.png";
   static const String backgroundImage1 = "assets/images/background_image_1.png";

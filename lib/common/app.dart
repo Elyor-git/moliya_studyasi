@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:moliya_studyasi/feature/home_page.dart';
+import 'package:moliya_studyasi/feature/login_page/login.dart';
 
 
 class App extends StatelessWidget {
@@ -8,11 +8,12 @@ class App extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const ScreenUtilInit(
+    return  ScreenUtilInit(
       designSize: Size(390, 844),
       child: MaterialApp(
+        theme: ThemeData(fontFamily: "Lato"),
         debugShowCheckedModeBanner: false,
-        home: HomePage(),
+        home: Login(),
         ),
     );
   }
