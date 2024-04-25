@@ -1,5 +1,8 @@
+import 'dart:ui';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../style/app_colors.dart';
@@ -10,6 +13,9 @@ class CustomTextField extends StatefulWidget {
     required this.icon,
     required this.focusNode,
     required this.hintText,
+    required this.function,
+    required this.textCapitalization,
+    required this.regExp,
     super.key,
   });
 
@@ -17,6 +23,9 @@ class CustomTextField extends StatefulWidget {
   final IconData icon;
   final FocusNode focusNode;
   final String hintText;
+  final Function(String) function;
+  final TextCapitalization textCapitalization;
+  final RegExp regExp;
 
   @override
   State<CustomTextField> createState() => _CustomTextFieldState();
@@ -27,56 +36,65 @@ class _CustomTextFieldState extends State<CustomTextField> {
   Widget build(BuildContext context) {
     return DecoratedBox(
       decoration: BoxDecoration(
-          borderRadius: const BorderRadius.all(
-            Radius.circular(40),
-          ),
-          boxShadow: [
-            BoxShadow(
-              offset: const Offset(0, 8),
-              color: AppColors.blackShadow10,
-              blurRadius: 20,
-              blurStyle: BlurStyle.outer,
-            )
-          ]),
-      child: SizedBox(
-        height: 60.h,
-        width: 300.w,
+        boxShadow: [
+          BoxShadow(
+            blurRadius: 20,
+            offset: const Offset(0, 8),
+            color: AppColors.blackShadow10,
+          )
+        ],
+      ),
+      child: Padding(
+        padding: EdgeInsets.symmetric(horizontal: 45.w),
         child: TextField(
+          inputFormatters: [
+            FilteringTextInputFormatter.allow(widget.regExp)
+          ],
           focusNode: widget.focusNode,
           controller: widget.controller,
+          onChanged: widget.function,
           onTapOutside: (val) {
             FocusScope.of(context).unfocus();
           },
-          cursorHeight: 25,
+          textCapitalization: widget.textCapitalization,
           cursorRadius: const Radius.circular(40),
           style: TextStyle(
             color: AppColors.grey,
-            fontSize: 18.sp,
+            fontSize: 15.sp,
           ),
           cursorColor: AppColors.greyTextColor,
           decoration: InputDecoration(
+            fillColor: AppColors.white,
+            filled: true,
             hintText: widget.hintText,
             hintStyle: TextStyle(
-              fontSize: 18.sp,
+              fontSize: 15.sp,
               color: AppColors.greyTextColor,
             ),
-            prefixIcon: Padding(
-              padding: const EdgeInsets.only(top: 18),
-              child: Icon(
-                widget.icon,
-                size: 33.sp,
-                color: AppColors.grey,
+            prefixIcon: Icon(
+              widget.icon,
+              size: 33.sp,
+              color: AppColors.grey,
+            ),
+            errorBorder: const OutlineInputBorder(
+              borderRadius: BorderRadius.all(
+                Radius.circular(40),
               ),
+              borderSide: BorderSide.none,
             ),
-            contentPadding: EdgeInsets.only(
-              top: 22.h,
-              right: 22.w,
-            ),
-            // error: const SizedBox.shrink(),
-            errorBorder: InputBorder.none,
             focusedErrorBorder: InputBorder.none,
-            focusedBorder: InputBorder.none,
-            enabledBorder: InputBorder.none,
+            focusedBorder: const OutlineInputBorder(
+              borderRadius: BorderRadius.all(
+                Radius.circular(40),
+              ),
+              borderSide: BorderSide.none,
+            ),
+            enabledBorder: const OutlineInputBorder(
+              borderRadius: BorderRadius.all(
+                Radius.circular(40),
+              ),
+              borderSide: BorderSide.none,
+            ),
             disabledBorder: InputBorder.none,
             border: InputBorder.none,
           ),

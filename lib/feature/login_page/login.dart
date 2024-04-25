@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -53,6 +54,25 @@ class _LoginState extends State<Login> {
 
   bool _onPasswordFocusChange() => _passwordFocusNode.hasFocus;
 
+  final ValueNotifier<bool> _onTextInputError = ValueNotifier(false);
+
+  final ValueNotifier<bool> _onPasswordInputError = ValueNotifier(false);
+
+  RegExp employeeIdRegex = RegExp(r"^[A-Z][a-z0-9]*$");
+  RegExp employeePasswordRegex =
+      RegExp(r"[A-Za-z0-9]*$");
+
+  void _onTextFieldIdError(String value) {
+    _onTextInputError.value =
+        !employeeIdRegex.hasMatch(value) || !value.contains(RegExp(r'[0-9]'));
+  }
+
+  void _onTextFieldPasswordError(String value) {
+    _onPasswordInputError.value = !employeePasswordRegex.hasMatch(value) ||
+        !value.contains(RegExp(r'[0-9]')) ||
+        !value.contains(RegExp(r'[A-Z]'));
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -102,22 +122,37 @@ class _LoginState extends State<Login> {
                   ),
                 ),
                 SizedBox(height: 35.h),
-                const ErrorText(
-                  error: "Hello",
-                  isVisible: true,
+                ValueListenableBuilder(
+                  valueListenable: _onTextInputError,
+                  builder: (context, value, child) {
+                    return ErrorText(
+                      error: "Noto'g'ri Id",
+                      isVisible: value,
+                    );
+                  },
                 ),
                 CustomTextField(
+                  regExp: employeeIdRegex,
+                  textCapitalization: TextCapitalization.words,
+                  function: _onTextFieldIdError,
                   hintText: AppTexts.ishchiId,
                   controller: _textController,
                   icon: Icons.person_rounded,
                   focusNode: _textFocusNode,
                 ),
                 SizedBox(height: 41.h),
-                const ErrorText(
-                  error: "Hello",
-                  isVisible: true,
-                ),
+                ValueListenableBuilder(
+                    valueListenable: _onPasswordInputError,
+                    builder: (context, value, child) {
+                      return ErrorText(
+                        error: "Noto'g'ri parol",
+                        isVisible: value,
+                      );
+                    }),
                 CustomTextField(
+                  regExp: employeePasswordRegex,
+                  textCapitalization: TextCapitalization.none,
+                  function: _onTextFieldPasswordError,
                   hintText: AppTexts.parol,
                   controller: _passwordController,
                   icon: Icons.lock_rounded,

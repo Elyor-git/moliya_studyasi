@@ -34,7 +34,9 @@ class TextAndButton extends StatelessWidget {
         SizedBox(width: paddingFromMiddle),
         DecoratedBox(
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.all(Radius.circular(50.sp),),
+            borderRadius: BorderRadius.all(
+              Radius.circular(50.sp),
+            ),
             gradient: LinearGradient(colors: AppColors.button),
           ),
           child: IconButton(
