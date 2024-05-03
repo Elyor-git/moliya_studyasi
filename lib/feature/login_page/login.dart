@@ -1,11 +1,9 @@
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:moliya_studyasi/common/widget/custom_textfield.dart';
 import 'package:moliya_studyasi/common/widget/error_text.dart';
 import 'package:moliya_studyasi/common/widget/text_and_button.dart';
+import 'package:moliya_studyasi/feature/sign_up/sign_up.dart';
 
 import '../../common/const/app_consts.dart';
 import '../../common/style/app_colors.dart';
@@ -58,17 +56,16 @@ class _LoginState extends State<Login> {
 
   final ValueNotifier<bool> _onPasswordInputError = ValueNotifier(false);
 
-  RegExp employeeIdRegex = RegExp(r"^[A-Z][a-z0-9]*$");
-  RegExp employeePasswordRegex =
-      RegExp(r"[A-Za-z0-9]*$");
+  final RegExp _employeeIdRegex = RegExp(r"^[A-Z][a-z0-9]*$");
+  final RegExp _employeePasswordRegex = RegExp(r"[A-Za-z0-9]*$");
 
   void _onTextFieldIdError(String value) {
     _onTextInputError.value =
-        !employeeIdRegex.hasMatch(value) || !value.contains(RegExp(r'[0-9]'));
+        !_employeeIdRegex.hasMatch(value) || !value.contains(RegExp(r'[0-9]'));
   }
 
   void _onTextFieldPasswordError(String value) {
-    _onPasswordInputError.value = !employeePasswordRegex.hasMatch(value) ||
+    _onPasswordInputError.value = !_employeePasswordRegex.hasMatch(value) ||
         !value.contains(RegExp(r'[0-9]')) ||
         !value.contains(RegExp(r'[A-Z]'));
   }
@@ -132,7 +129,7 @@ class _LoginState extends State<Login> {
                   },
                 ),
                 CustomTextField(
-                  regExp: employeeIdRegex,
+                  regExp: _employeeIdRegex,
                   textCapitalization: TextCapitalization.words,
                   function: _onTextFieldIdError,
                   hintText: AppTexts.ishchiId,
@@ -150,7 +147,7 @@ class _LoginState extends State<Login> {
                       );
                     }),
                 CustomTextField(
-                  regExp: employeePasswordRegex,
+                  regExp: _employeePasswordRegex,
                   textCapitalization: TextCapitalization.none,
                   function: _onTextFieldPasswordError,
                   hintText: AppTexts.parol,
@@ -161,7 +158,10 @@ class _LoginState extends State<Login> {
                 SizedBox(height: 120.h),
                 TextAndButton(
                   text: AppTexts.kirish,
-                  onTap: () {},
+                  onTap: () {
+                    // todo
+                    // Login to account
+                  },
                   paddingFromRight: 45.w,
                   paddingFromMiddle: 14.w,
                 ),
@@ -176,13 +176,23 @@ class _LoginState extends State<Login> {
                         fontSize: 15.sp,
                       ),
                     ),
-                    Text(
-                      AppTexts.yaratish,
-                      style: TextStyle(
-                        color: AppColors.blue,
-                        decoration: TextDecoration.underline,
-                        decorationColor: AppColors.blue,
-                        fontSize: 15.sp,
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const SignUp(),
+                          ),
+                        );
+                      },
+                      child: Text(
+                        AppTexts.yaratish,
+                        style: TextStyle(
+                          color: AppColors.blue,
+                          decoration: TextDecoration.underline,
+                          decorationColor: AppColors.blue,
+                          fontSize: 15.sp,
+                        ),
                       ),
                     ),
                   ],

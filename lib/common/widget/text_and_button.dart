@@ -1,6 +1,4 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:moliya_studyasi/common/style/app_colors.dart';
 
@@ -55,7 +53,7 @@ class TextAndButton extends StatelessWidget {
             onPressed: onTap,
             icon: Icon(
               Icons.arrow_forward_rounded,
-              size: 26.dm,
+              size: 26.sp,
               color: AppColors.white,
             ),
           ),
