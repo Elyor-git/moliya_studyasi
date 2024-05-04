@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:moliya_studyasi/feature/login_page/login.dart';
+import 'package:moliya_studyasi/feature/profile_page/profile.dart';
 
 class App extends StatelessWidget {
   const App({super.key});
@@ -12,7 +12,7 @@ class App extends StatelessWidget {
       child: MaterialApp(
         theme: ThemeData(fontFamily: "Lato"),
         debugShowCheckedModeBanner: false,
-        home: const Login(),
+        home: const Profile(),
       ),
     );
   }

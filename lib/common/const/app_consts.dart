@@ -10,7 +10,7 @@
   static const String user = "assets/images/user.png";
 }
 
-final  class AppTexts {
+final class AppTexts {
   static const String davomat = "Davomat";
   static const String akkauntgaKirish = "Akkauntga kirish";
   static const String ishchiId = "Ishchi Id";
@@ -24,7 +24,7 @@ final  class AppTexts {
   static const String familya = "Familya";
 
   static const String hushKelibsiz = "Hush kelibsiz";
-  static const String status = "Status";
+  static const String status = "Bugungi Status";
   static const String chiqish = "Chiqish";
 
   static const String tarix = "Tarix";
