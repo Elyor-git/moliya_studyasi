@@ -5,6 +5,8 @@ import 'package:moliya_studyasi/common/const/app_consts.dart';
 import 'package:moliya_studyasi/common/style/app_colors.dart';
 import 'package:moliya_studyasi/common/widget/avatar_image.dart';
 
+import 'qr_code_scanner_camera.dart';
+
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
 
@@ -51,7 +53,7 @@ class HomePage extends StatelessWidget {
                       Row(
                         crossAxisAlignment: CrossAxisAlignment.end,
                         children: [
-                          AvatarImage(size: 40.dg,backgroundSize:  88.dg),
+                          AvatarImage(size: 40.dg, backgroundSize: 88.dg),
                           SizedBox(width: 10.w),
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
@@ -204,9 +206,14 @@ class HomePage extends StatelessWidget {
                 ),
                 SizedBox(height: 30.h),
                 GestureDetector(
-                  onTap: (){
+                  onTap: () {
                     // todo
-                    // create a camera scan QrCode
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const QrCodeScanner(),
+                      ),
+                    );
                   },
                   child: DecoratedBox(
                     decoration: BoxDecoration(
@@ -221,14 +228,12 @@ class HomePage extends StatelessWidget {
                             blurRadius: 20,
                           ),
                         ]),
-                    child:  SizedBox.square(
+                    child: SizedBox.square(
                       dimension: 250.w,
                       child: Transform.scale(
                         scale: 0.7,
                         child: const Image(
-                          image: AssetImage(
-                            AppImages.camera
-                          ),
+                          image: AssetImage(AppImages.camera),
                         ),
                       ),
                     ),
@@ -242,3 +247,4 @@ class HomePage extends StatelessWidget {
     );
   }
 }
+

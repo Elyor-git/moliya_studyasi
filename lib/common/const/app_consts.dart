@@ -1,5 +1,8 @@
- final class AppImages {
+import 'package:shared_preferences/shared_preferences.dart';
+
+final class AppImages {
   AppImages._();
+
   static const String backgroundImage3 = "assets/images/background_image_3.png";
   static const String backgroundImage2 = "assets/images/background_image_2.png";
   static const String backgroundImage1 = "assets/images/background_image_1.png";
@@ -30,3 +33,8 @@ final class AppTexts {
   static const String tarix = "Tarix";
   static const String oyniTanlang = "Oyni tanlang";
 }
+enum StorageKeys {
+name,surname, employeeId, firebaseId,
+}
+
+late final SharedPreferences $storage;
