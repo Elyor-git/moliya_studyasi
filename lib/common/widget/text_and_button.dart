@@ -8,13 +8,15 @@ class TextAndButton extends StatelessWidget {
     required this.onTap,
     required this.paddingFromRight,
     required this.paddingFromMiddle,
+    required this.icon,
     super.key,
   });
 
   final String text;
   final double paddingFromRight;
   final double paddingFromMiddle;
-  final VoidCallback onTap;
+  final Widget icon;
+  final VoidCallback? onTap;
 
   @override
   Widget build(BuildContext context) {
@@ -51,11 +53,7 @@ class TextAndButton extends StatelessWidget {
               ),
             ),
             onPressed: onTap,
-            icon: Icon(
-              Icons.arrow_forward_rounded,
-              size: 26.sp,
-              color: AppColors.white,
-            ),
+            icon: icon,
           ),
         ),
         SizedBox(width: paddingFromRight),

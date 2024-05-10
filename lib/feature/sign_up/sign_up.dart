@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:moliya_studyasi/common/widget/custom_textfield.dart';
 import 'package:moliya_studyasi/common/widget/error_text.dart';
 import 'package:moliya_studyasi/common/widget/text_and_button.dart';
+import 'package:moliya_studyasi/feature/sign_up/sign_up_bloc/sign_up_bloc.dart';
+import 'package:moliya_studyasi/feature/sign_up/sign_up_repository/sign_up_repository.dart';
 
 import '../../common/const/app_consts.dart';
 import '../../common/style/app_colors.dart';
+import '../home_page/home_page.dart';
 
 class SignUp extends StatefulWidget {
   const SignUp({super.key});
@@ -28,9 +32,14 @@ class _SignUpState extends State<SignUp> {
   final FocusNode _passwordFocusNode = FocusNode();
 
   late final ValueNotifier<bool> _focusState;
+  late final SignUpBloc bloc;
 
   @override
   void initState() {
+    bloc = SignUpBloc(
+      signUpRepository: SignUpRepository(),
+    );
+
     _focusState = ValueNotifier(false);
     _nameFocusNode.addListener(() {
       _updateState();
@@ -61,6 +70,8 @@ class _SignUpState extends State<SignUp> {
     _passwordController.dispose();
     _passwordFocusNode.dispose();
 
+    bloc.close();
+
     super.dispose();
   }
 
@@ -79,8 +90,6 @@ class _SignUpState extends State<SignUp> {
 
   final ValueNotifier<bool> _onPasswordInputError = ValueNotifier(false);
 
-
-
   void _onTextFieldIdError(String value) {
     _onTextInputError.value =
         !_regExpId.hasMatch(value) || !value.contains(RegExp(r'[0-9]'));
@@ -92,135 +101,191 @@ class _SignUpState extends State<SignUp> {
         !value.contains(RegExp(r'[A-Z]'));
   }
 
+  bool _prosses = false;
+
+  void signUp() {
+    bloc.add(
+      SignUpRequired(
+        employeeId: _idController.text.trim(),
+        password: _passwordController.text.trim(),
+        name: _nameController.text.trim(),
+        surname: _surnameController.text.trim(),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      resizeToAvoidBottomInset: false,
-      body: DecoratedBox(
-        decoration: const BoxDecoration(
-          image: DecorationImage(
-            image: AssetImage(AppImages.backgroundImage3),
-            fit: BoxFit.fill,
+    return BlocProvider<SignUpBloc>.value(
+      value: bloc,
+      child: Scaffold(
+        resizeToAvoidBottomInset: false,
+        body: DecoratedBox(
+          decoration: const BoxDecoration(
+            image: DecorationImage(
+              image: AssetImage(AppImages.backgroundImage3),
+              fit: BoxFit.fill,
+            ),
           ),
-        ),
-        child: SizedBox(
-          height: double.infinity,
-          width: double.infinity,
-          child: SafeArea(
-            child: ListView(
-              children: [
-                SizedBox(height: 80.h),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      textScaler: TextScaler.noScaling,
-                      AppTexts.akkauntYaratish,
-                      style: TextStyle(
-                        fontSize: 30.sp,
-                        fontWeight: FontWeight.bold,
+          child: SizedBox(
+            height: double.infinity,
+            width: double.infinity,
+            child: SafeArea(
+              child: ListView(
+                children: [
+                  SizedBox(height: 80.h),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        textScaler: TextScaler.noScaling,
+                        AppTexts.akkauntYaratish,
+                        style: TextStyle(
+                          fontSize: 30.sp,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
-                    ),
-                  ],
-                ),
-                SizedBox(height: 42.h),
-                CustomTextField(
-                  regExp: _regExpName,
-                  textCapitalization: TextCapitalization.words,
-                  function: (s) {},
-                  controller: _nameController,
-                  icon: Icons.person_rounded,
-                  focusNode: _nameFocusNode,
-                  hintText: AppTexts.ism,
-                ),
-                SizedBox(height: 42.h),
-                CustomTextField(
-                  regExp: _regExpSurname,
-                  textCapitalization: TextCapitalization.words,
-                  function: (s) {},
-                  controller: _surnameController,
-                  icon: Icons.person_rounded,
-                  focusNode: _surnameFocusNode,
-                  hintText: AppTexts.familya,
-                ),
-                SizedBox(height: 42.h),
-                ValueListenableBuilder(
-                  valueListenable: _onTextInputError,
-                  builder: (context, value, child) {
-                    return ErrorText(
-                      error: "Noto'g'ri Id",
-                      isVisible: value,
-                    );
-                  },
-                ),
-                CustomTextField(
-                  regExp: _regExpId,
-                  textCapitalization: TextCapitalization.words,
-                  function: _onTextFieldIdError,
-                  controller: _idController,
-                  icon: Icons.person_rounded,
-                  focusNode: _idFocusNode,
-                  hintText: AppTexts.ishchiId,
-                ),
-                SizedBox(height: 42.h),
-                ValueListenableBuilder(
-                    valueListenable: _onPasswordInputError,
+                    ],
+                  ),
+                  SizedBox(height: 42.h),
+                  CustomTextField(
+                    regExp: _regExpName,
+                    textCapitalization: TextCapitalization.words,
+                    function: (s) {},
+                    controller: _nameController,
+                    icon: Icons.person_rounded,
+                    focusNode: _nameFocusNode,
+                    hintText: AppTexts.ism,
+                  ),
+                  SizedBox(height: 42.h),
+                  CustomTextField(
+                    regExp: _regExpSurname,
+                    textCapitalization: TextCapitalization.words,
+                    function: (s) {},
+                    controller: _surnameController,
+                    icon: Icons.person_rounded,
+                    focusNode: _surnameFocusNode,
+                    hintText: AppTexts.familya,
+                  ),
+                  SizedBox(height: 42.h),
+                  ValueListenableBuilder(
+                    valueListenable: _onTextInputError,
                     builder: (context, value, child) {
                       return ErrorText(
-                        error: "Noto'g'ri parol",
+                        error: "Noto'g'ri Id",
                         isVisible: value,
                       );
-                    }),
-                CustomTextField(
-                  regExp: _regExpPassword,
-                  textCapitalization: TextCapitalization.none,
-                  function: _onTextFieldPasswordError,
-                  controller: _passwordController,
-                  icon: Icons.lock_rounded,
-                  focusNode: _passwordFocusNode,
-                  hintText: AppTexts.parol,
-                ),
-                SizedBox(height: 60.h),
-                TextAndButton(
-                  text: AppTexts.yaratish,
-                  onTap: () {
-                    // todo
-                    // Create a account
-                  },
-                  paddingFromRight: 45.w,
-                  paddingFromMiddle: 15.w,
-                ),
-                SizedBox(height: 60.h),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      AppTexts.akkauntgaKirish,
-                      style: TextStyle(
-                        color: AppColors.blackTextColor,
-                        fontSize: 15.sp,
+                    },
+                  ),
+                  CustomTextField(
+                    regExp: _regExpId,
+                    textCapitalization: TextCapitalization.words,
+                    function: _onTextFieldIdError,
+                    controller: _idController,
+                    icon: Icons.person_rounded,
+                    focusNode: _idFocusNode,
+                    hintText: AppTexts.ishchiId,
+                  ),
+                  SizedBox(height: 42.h),
+                  ValueListenableBuilder(
+                      valueListenable: _onPasswordInputError,
+                      builder: (context, value, child) {
+                        return ErrorText(
+                          error: "Noto'g'ri parol",
+                          isVisible: value,
+                        );
+                      }),
+                  CustomTextField(
+                    regExp: _regExpPassword,
+                    textCapitalization: TextCapitalization.none,
+                    function: _onTextFieldPasswordError,
+                    controller: _passwordController,
+                    icon: Icons.lock_rounded,
+                    focusNode: _passwordFocusNode,
+                    hintText: AppTexts.parol,
+                  ),
+                  SizedBox(height: 60.h),
+                  BlocListener<SignUpBloc, SignUpState>(
+                    bloc: bloc,
+                    listener: (_, state) {
+                      if (state is SignUpSuccessState) {
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const HomePage(),
+                          ),
+                        );
+                      } else if (state is SignUpLoadingState) {
+                        setState(() {
+                          _prosses = true;
+                        });
+                      } else if (state is SignUpFailureState) {
+                        setState(() {
+                          _prosses = false;
+                        });
+                        ScaffoldMessenger.of(context).hideCurrentSnackBar();
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            duration: Duration(seconds: 1),
+                            content: Text("Xatolik yuzberdi"),
+                          ),
+                        );
+                      }
+                    },
+                    child: TextAndButton(
+                      icon: _prosses
+                          ? SizedBox.square(
+                        dimension: 25.sp,
+                        child: CircularProgressIndicator(
+                          color: AppColors.white,
+                        ),
+                      )
+                          : Icon(
+                        Icons.arrow_forward_rounded,
+                        size: 26.sp,
+                        color: AppColors.white,
                       ),
+                      text: AppTexts.yaratish,
+                      onTap: signUp,
+                      paddingFromRight: 45.w,
+                      paddingFromMiddle: 15.w,
                     ),
-                    GestureDetector(
-                      onTap: () {
-                        Navigator.pop(context);
-                      },
-                      child: Text(
-                        AppTexts.kirish,
+                  ),
+                  SizedBox(height: 60.h),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        AppTexts.akkauntgaKirish,
                         style: TextStyle(
-                          color: AppColors.blue,
-                          decoration: TextDecoration.underline,
-                          decorationColor: AppColors.blue,
+                          color: AppColors.blackTextColor,
                           fontSize: 15.sp,
                         ),
                       ),
-                    ),
-                  ],
-                ),
-                SizedBox(
-                  height: MediaQuery.of(context).viewInsets.bottom + 15.h,
-                ),
-              ],
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.pop(context);
+                        },
+                        child: Text(
+                          AppTexts.kirish,
+                          style: TextStyle(
+                            color: AppColors.blue,
+                            decoration: TextDecoration.underline,
+                            decorationColor: AppColors.blue,
+                            fontSize: 15.sp,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(
+                    height: MediaQuery
+                        .of(context)
+                        .viewInsets
+                        .bottom + 15.h,
+                  ),
+                ],
+              ),
             ),
           ),
         ),

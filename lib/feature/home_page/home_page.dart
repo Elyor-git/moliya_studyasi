@@ -82,9 +82,13 @@ class HomePage extends StatelessWidget {
                         ],
                       ),
                       GestureDetector(
-                        onTap: () {
+                        onTap: ()  {
                           // todo
                           // open history and make widgets from firebase
+                          print($storage.get(StorageKeys.firebaseId.name));
+                          print($storage.get(StorageKeys.name.name));
+                          print($storage.get(StorageKeys.surname.name));
+                          print($storage.get(StorageKeys.employeeId.name));
                         },
                         child: Image(
                           width: 33.sp,
@@ -247,4 +251,3 @@ class HomePage extends StatelessWidget {
     );
   }
 }
-

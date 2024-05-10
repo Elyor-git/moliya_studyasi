@@ -6,6 +6,7 @@ import 'package:moliya_studyasi/common/widget/error_text.dart';
 import 'package:moliya_studyasi/common/widget/text_and_button.dart';
 import 'package:moliya_studyasi/feature/home_page/home_page.dart';
 import 'package:moliya_studyasi/feature/login_page/login_bloc/login_bloc.dart';
+import 'package:moliya_studyasi/feature/login_page/login_repository/login_repository.dart';
 import 'package:moliya_studyasi/feature/sign_up/sign_up.dart';
 
 import '../../common/const/app_consts.dart';
@@ -24,9 +25,11 @@ class _LoginState extends State<Login> {
   final _passwordController = TextEditingController();
   final _passwordFocusNode = FocusNode();
   late ValueNotifier<bool> _focusState;
+  late final LoginBloc bloc;
 
   @override
   void initState() {
+    bloc = LoginBloc(loginRepository: LoginRepository());
     _focusState = ValueNotifier(false);
     _textFocusNode.addListener(() {
       _updateFocusState();
@@ -44,7 +47,7 @@ class _LoginState extends State<Login> {
     _passwordController.dispose();
     _passwordFocusNode.dispose();
     _focusState.dispose();
-
+    bloc.close();
     super.dispose();
   }
 
@@ -74,25 +77,21 @@ class _LoginState extends State<Login> {
         !value.contains(RegExp(r'[A-Z]'));
   }
 
+  bool _prosses = false;
+
+  void login() {
+    bloc.add(
+      LogInRequired(
+        employeeId: _textController.text.trim(),
+        password: _passwordController.text.trim(),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    return BlocListener<LoginBloc, LoginState>(
-      listener: (_, state) {
-        if (state is LoginSuccess) {
-          print("success");
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => const HomePage(),
-            ),
-          );
-        } else if (state is LoginProcess) {
-          print("presses");
-        } else if (state is LoginFailure) {
-          print("LoginFailure");
-        }
-        // TODO: implement listener
-      },
+    return BlocProvider<LoginBloc>(
+      create: (_) => bloc,
       child: Scaffold(
         resizeToAvoidBottomInset: false,
         body: DecoratedBox(
@@ -177,18 +176,52 @@ class _LoginState extends State<Login> {
                     focusNode: _passwordFocusNode,
                   ),
                   SizedBox(height: 120.h),
-                  TextAndButton(
-                    text: AppTexts.kirish,
-                    onTap: () {
-                      context.read<LoginBloc>().add(
-                            LogInRequired(
-                              employeeId: _textController.text.trim(),
-                              password: _passwordController.text.trim(),
-                            ),
-                          );
+                  BlocListener<LoginBloc, LoginState>(
+                    bloc: bloc,
+                    listener: (_, state) {
+                      if (state is LoginSuccess) {
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const HomePage(),
+                          ),
+                        );
+                      } else if (state is LoginProcess) {
+                        setState(() {
+                          _prosses = true;
+                        });
+                      } else if (state is LoginFailure) {
+                        setState(
+                          () {
+                            _prosses = false;
+                          },
+                        );
+                        ScaffoldMessenger.of(context).hideCurrentSnackBar();
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            duration: Duration(seconds: 1),
+                            content: Text("Id yoki password xato"),
+                          ),
+                        );
+                      }
                     },
-                    paddingFromRight: 45.w,
-                    paddingFromMiddle: 14.w,
+                    child: TextAndButton(
+                      icon: _prosses
+                          ? SizedBox.square(
+                              dimension: 25.sp,
+                              child: CircularProgressIndicator(
+                                color: AppColors.white,
+                              ))
+                          : Icon(
+                              Icons.arrow_forward_rounded,
+                              size: 26.sp,
+                              color: AppColors.white,
+                            ),
+                      text: AppTexts.kirish,
+                      onTap: login,
+                      paddingFromRight: 45.w,
+                      paddingFromMiddle: 14.w,
+                    ),
                   ),
                   SizedBox(height: 50.h),
                   Row(
