@@ -5,7 +5,7 @@ import 'package:moliya_studyasi/common/const/app_consts.dart';
 import 'package:moliya_studyasi/common/style/app_colors.dart';
 import 'package:moliya_studyasi/common/widget/avatar_image.dart';
 
-import 'qr_code_scanner_camera.dart';
+import 'qr_code/qr_code_scanner_camera.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -68,9 +68,7 @@ class HomePage extends StatelessWidget {
                                 ),
                               ),
                               Text(
-                                // todo
-                                // name come from firebase
-                                "Norboyev Eliyor",
+                                "${$storage.get(StorageKeys.surname.name)} ${$storage.get(StorageKeys.name.name)}",
                                 style: TextStyle(
                                   color: AppColors.blackTextColor,
                                   fontSize: 23.sp,
@@ -82,13 +80,8 @@ class HomePage extends StatelessWidget {
                         ],
                       ),
                       GestureDetector(
-                        onTap: ()  {
-                          // todo
-                          // open history and make widgets from firebase
-                          print($storage.get(StorageKeys.firebaseId.name));
-                          print($storage.get(StorageKeys.name.name));
-                          print($storage.get(StorageKeys.surname.name));
-                          print($storage.get(StorageKeys.employeeId.name));
+                        onTap: ()  async  {
+                          // todo open history and make widgets from firebase
                         },
                         child: Image(
                           width: 33.sp,
