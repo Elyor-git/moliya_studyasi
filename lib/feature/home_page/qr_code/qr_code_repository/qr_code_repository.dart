@@ -5,15 +5,17 @@ import 'package:moliya_studyasi/common/const/app_consts.dart';
 class QRCodeRepository {
   Future<void> setAndUpdateDateTime({required String barcodeRes}) async {
     try {
-      if(barcodeRes == "Hello welcome to Moliya studyasi") {
+      if (barcodeRes == "Hello welcome to Moliya studyasi") {
         await FirebaseFirestore.instance
-          .collection("Employees")
-          .doc($storage.getString(StorageKeys.firebaseId.name))
-          .collection("Davomat")
-          .doc(DateFormat("dd MM yyyy").format(DateTime.now()))
-          .set({
-        "kirish": DateFormat("HH:mm").format(DateTime.now()),
-      });}else if(barcodeRes == "Goodbye see you soon"){
+            .collection("Employees")
+            .doc($storage.getString(StorageKeys.firebaseId.name))
+            .collection("Davomat")
+            .doc(DateFormat("dd MM yyyy").format(DateTime.now()))
+            .set({
+          "kirish": DateFormat("HH:mm").format(DateTime.now()),
+          "chiqish": "--:--",
+        });
+      } else if (barcodeRes == "Goodbye see you soon") {
         await FirebaseFirestore.instance
             .collection("Employees")
             .doc($storage.getString(StorageKeys.firebaseId.name))
@@ -27,6 +29,4 @@ class QRCodeRepository {
       throw Exception();
     }
   }
-
-
 }

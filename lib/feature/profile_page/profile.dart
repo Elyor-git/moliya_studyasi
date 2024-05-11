@@ -13,7 +13,7 @@ class Profile extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: DecoratedBox(
-        decoration: const BoxDecoration(
+        decoration:  const BoxDecoration(
           image: DecorationImage(
             image: AssetImage(AppImages.backgroundImage1),
             fit: BoxFit.fill,
@@ -32,7 +32,7 @@ class Profile extends StatelessWidget {
                 ),
                 const SizedBox(height: 10),
                 Text(
-                  "ElyorId",
+                  "${$storage.getString(StorageKeys.employeeId.name)}",
                   style: TextStyle(
                     color: AppColors.blackTextColor,
                     fontSize: 20.sp,
@@ -41,9 +41,9 @@ class Profile extends StatelessWidget {
                 ),
                 SizedBox(height: 45.h),
                 // todo Add profile page to firebase
-                const NameInfo(
-                  surname: "Norboyev",
-                  name: "Eiyor",
+                 NameInfo(
+                  surname: "${$storage.getString(StorageKeys.surname.name)}",
+                  name: "${$storage.getString(StorageKeys.name.name)}",
                 ),
               ],
             ),
