@@ -14,15 +14,12 @@ class TodayStatusBloc extends Bloc<TodayStatusEvent, TodayStatusState> {
     on<TodayStatus>((event, emit) async {
       emit(TodayLoadingState());
       try {
-        String checkIn = await repository.todayCheckIn();
-        String checkOut = await repository.todayCheckOut();
+        (String, String) info = await repository.todayInfo();
 
-        emit(TodayLoadedState(checkIn: checkIn, checkOut: checkOut));
+        emit(TodayLoadedState(checkIn: info.$1, checkOut: info.$2));
       } catch (e) {
         emit(TodayErrorState());
       }
     });
-
-
   }
 }

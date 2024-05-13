@@ -4,7 +4,7 @@ import 'package:intl/intl.dart';
 import '../../../../common/const/app_consts.dart';
 
 class TodayStatusRepository {
-  Future<String> todayCheckIn() async {
+  Future<(String, String)> todayInfo() async {
     try {
       DocumentSnapshot snapshot = await FirebaseFirestore.instance
           .collection("Employees")
@@ -12,23 +12,12 @@ class TodayStatusRepository {
           .collection("Davomat")
           .doc(DateFormat("dd MM yyyy").format(DateTime.now()))
           .get();
-      return snapshot["kirish"];
+        String checkIn = snapshot["kirish"];
+        String checkOut = snapshot["chiqish"];
+      return (checkIn, checkOut);
     } catch (e) {
       throw Exception();
     }
   }
 
-  Future<String> todayCheckOut() async {
-    try {
-      DocumentSnapshot snapshot = await FirebaseFirestore.instance
-          .collection("Employees")
-          .doc($storage.getString(StorageKeys.firebaseId.name))
-          .collection("Davomat")
-          .doc(DateFormat("dd MM yyyy").format(DateTime.now()))
-          .get();
-      return snapshot["chiqish"];
-    } catch (e) {
-      throw Exception();
-    }
-  }
 }

@@ -2,39 +2,27 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
+import 'package:moliya_studyasi/common/config/month_take_mixin.dart';
 import 'package:moliya_studyasi/common/const/app_consts.dart';
 import 'package:moliya_studyasi/common/style/app_colors.dart';
 import 'package:moliya_studyasi/common/widget/avatar_image.dart';
+import 'package:moliya_studyasi/feature/home_page/qr_code/qr_code_bloc/location/location_service.dart';
 import 'package:moliya_studyasi/feature/home_page/todays_status/today_status_bloc/today_status_bloc.dart';
 import 'package:moliya_studyasi/feature/home_page/todays_status/todays_status_repository/todays_status_repository.dart';
 
+import '../history_page/history_page.dart';
+import '../profile_page/profile.dart';
 import 'qr_code/qr_code_scanner_camera.dart';
 
-class HomePage extends StatefulWidget {
+class HomePage extends StatefulWidget  {
   const HomePage({super.key});
 
   @override
   State<HomePage> createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage> {
-  String _whichMonth(int month) {
-    return switch (month) {
-      1 => "Yan",
-      2 => "Fev",
-      3 => "Mar",
-      4 => "Apr",
-      5 => "May",
-      6 => "Iyn",
-      7 => "Iyl",
-      8 => "Avg",
-      9 => "Sen",
-      10 => "Okt",
-      11 => "Noy",
-      12 => "Dek",
-      _ => "",
-    };
-  }
+class _HomePageState extends State<HomePage> with MonthTake  {
+
 
   late final TodayStatusBloc bloc;
 
@@ -42,6 +30,7 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     bloc = TodayStatusBloc(repository: TodayStatusRepository());
     bloc.add(TodayStatus());
+    _getPermission();
     super.initState();
   }
 
@@ -49,6 +38,10 @@ class _HomePageState extends State<HomePage> {
   void dispose() {
     bloc.close();
     super.dispose();
+  }
+
+  void _getPermission () async{
+   await LocationService().takePermission();
   }
 
   bool _loading = false;
@@ -90,7 +83,20 @@ class _HomePageState extends State<HomePage> {
                           Row(
                             crossAxisAlignment: CrossAxisAlignment.end,
                             children: [
-                              AvatarImage(size: 40.dg, backgroundSize: 88.dg),
+                              GestureDetector(
+                                onTap: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => const Profile(),
+                                    ),
+                                  );
+                                },
+                                child: AvatarImage(
+                                  size: 40.dg,
+                                  backgroundSize: 88.dg,
+                                ),
+                              ),
                               SizedBox(width: 10.w),
                               Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -123,7 +129,12 @@ class _HomePageState extends State<HomePage> {
                           ),
                           GestureDetector(
                             onTap: () async {
-                              // todo open history and make widgets from firebase
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => const HistoryPage(),
+                                ),
+                              );
                             },
                             child: Image(
                               width: 33.sp,
@@ -162,10 +173,9 @@ class _HomePageState extends State<HomePage> {
                                   Radius.circular(40),
                                 ),
                               ),
-                              // todo ashbdfjkhasjhdfkjabskjdbfhkjabskjhdfbhkjasbdfkhjas
                               child: BlocListener<TodayStatusBloc,
                                   TodayStatusState>(
-                                listener: (context, state) {
+                                listener: (_, state) {
                                   if (state is TodayLoadedState) {
                                     setState(() {
                                       _loading = false;
@@ -256,7 +266,7 @@ class _HomePageState extends State<HomePage> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
-                                    "${DateTime.now().day} ${_whichMonth(DateTime.now().month)} ${DateTime.now().year}",
+                                    "${DateTime.now().day} ${whichMonth(DateTime.now().month)} ${DateTime.now().year}",
                                     style: TextStyle(
                                       fontSize: 23.sp,
                                       fontWeight: FontWeight.bold,

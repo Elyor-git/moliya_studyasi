@@ -13,7 +13,7 @@ class Profile extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: DecoratedBox(
-        decoration:  const BoxDecoration(
+        decoration: const BoxDecoration(
           image: DecorationImage(
             image: AssetImage(AppImages.backgroundImage1),
             fit: BoxFit.fill,
@@ -25,6 +25,12 @@ class Profile extends StatelessWidget {
           child: SafeArea(
             child: Column(
               children: [
+                const Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    BackButton(),
+                  ],
+                ),
                 SizedBox(height: 50.h),
                 AvatarImage(
                   size: 65.dg,
@@ -40,8 +46,7 @@ class Profile extends StatelessWidget {
                   ),
                 ),
                 SizedBox(height: 45.h),
-                // todo Add profile page to firebase
-                 NameInfo(
+                NameInfo(
                   surname: "${$storage.getString(StorageKeys.surname.name)}",
                   name: "${$storage.getString(StorageKeys.name.name)}",
                 ),

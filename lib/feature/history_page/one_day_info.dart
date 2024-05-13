@@ -6,12 +6,23 @@ import 'package:moliya_studyasi/common/const/app_consts.dart';
 import 'package:moliya_studyasi/common/style/app_colors.dart';
 
 class OneDayInfo extends StatelessWidget {
-  const OneDayInfo({super.key});
+ final String day;
+ final String checkIn;
+ final String checkOut;
+ final String weekDay;
+
+  const OneDayInfo({
+    required this.day,
+    required this.checkIn,
+    required this.checkOut,
+    required this.weekDay,
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 25),
+      padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 10),
       child: DecoratedBox(
         decoration: BoxDecoration(
           color: AppColors.white,
@@ -51,15 +62,15 @@ class OneDayInfo extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
-                        "Fri",
+                        weekDay,
                         style: TextStyle(
                           color: AppColors.white,
                           fontWeight: FontWeight.bold,
-                          fontSize: 33.sp,
+                          fontSize: 30.sp,
                         ),
                       ),
                       Text(
-                        "06",
+                        day,
                         style: TextStyle(
                           color: AppColors.white,
                           fontWeight: FontWeight.bold,
@@ -88,8 +99,7 @@ class OneDayInfo extends StatelessWidget {
                           ),
                         ),
                         Text(
-                          "19:00",
-                          // todo Add firebase time bloc
+                          checkIn,
                           style: TextStyle(
                             fontSize: 30.sp,
                             fontWeight: FontWeight.bold,
@@ -109,8 +119,7 @@ class OneDayInfo extends StatelessWidget {
                           ),
                         ),
                         Text(
-                          "--:--",
-                          // TODO Add firebase time bloc
+                          checkOut,
                           style: TextStyle(
                             fontSize: 30.sp,
                             fontWeight: FontWeight.bold,
@@ -119,7 +128,6 @@ class OneDayInfo extends StatelessWidget {
                         ),
                       ],
                     ),
-
                   ],
                 ),
               ),
