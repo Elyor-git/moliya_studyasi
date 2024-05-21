@@ -37,6 +37,7 @@ class _QrCodeScannerState extends State<QrCodeScanner> {
   }
 
   bool _changeColor = false;
+  bool _loading = false;
 
   @override
   Widget build(BuildContext context) {
@@ -48,18 +49,24 @@ class _QrCodeScannerState extends State<QrCodeScanner> {
           if (state is QrCodeSuccessState) {
             setState(() {
               _changeColor = false;
+              _loading = false;
             });
             Navigator.pop(context);
+          } else if (state is QrCodeLoadingState) {
+            setState(() {
+              _loading = true;
+            });
           } else if (state is QrCodeFailedState) {
-           setState(() {
-             _changeColor = true;
-           });
+            setState(() {
+              _loading = false;
+              _changeColor = true;
+            });
           }
-
         },
         child: Stack(
           children: [
             _buildQrView(context),
+            _loading ? const Center(child: CircularProgressIndicator(),) : const SizedBox(),
             SafeArea(
               child: Padding(
                 padding: const EdgeInsets.all(10),
@@ -125,7 +132,7 @@ class _QrCodeScannerState extends State<QrCodeScanner> {
     this.controller = controller;
     controller.scannedDataStream.listen((scanData) {
       result = scanData;
-     _changeColor ?   controller.resumeCamera() : controller.pauseCamera();
+      _changeColor ? controller.resumeCamera() : controller.pauseCamera();
       if (result?.code != null) {
         bloc.add(QrCodeRequired(barcodeRes: result!.code!));
       }

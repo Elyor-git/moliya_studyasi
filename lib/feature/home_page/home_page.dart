@@ -6,7 +6,6 @@ import 'package:moliya_studyasi/common/config/month_take_mixin.dart';
 import 'package:moliya_studyasi/common/const/app_consts.dart';
 import 'package:moliya_studyasi/common/style/app_colors.dart';
 import 'package:moliya_studyasi/common/widget/avatar_image.dart';
-import 'package:moliya_studyasi/feature/home_page/qr_code/qr_code_bloc/location/location_service.dart';
 import 'package:moliya_studyasi/feature/home_page/todays_status/today_status_bloc/today_status_bloc.dart';
 import 'package:moliya_studyasi/feature/home_page/todays_status/todays_status_repository/todays_status_repository.dart';
 
@@ -30,7 +29,6 @@ class _HomePageState extends State<HomePage> with MonthTake  {
   void initState() {
     bloc = TodayStatusBloc(repository: TodayStatusRepository());
     bloc.add(TodayStatus());
-    _getPermission();
     super.initState();
   }
 
@@ -40,9 +38,7 @@ class _HomePageState extends State<HomePage> with MonthTake  {
     super.dispose();
   }
 
-  void _getPermission () async{
-   await LocationService().takePermission();
-  }
+
 
   bool _loading = false;
 
